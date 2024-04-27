@@ -1,0 +1,76 @@
+# inicio
+print("Seja bem vindo à ECeFG!")
+print("Nosso site contém tudo o que você procura.")
+print("As seguintes ações são possíveis:")
+print("Verificar o estoque (v_e);")
+print("Comprar um produto disponível (c_p);")
+print("Vender um produto (v_p);")
+print("Pesquisar um produto (p_p);")
+print("Finalizar navegação (f_n).")
+
+# variável geral
+estoque = {"mouse": 50, "teclado": 100, "headphone": 150, "microfone": 150, "roteador": 170, "power bank": 200, "relogiosmart": 300, "nobreak": 500, "caixa de som": 700, "placa de video": 700, "monitor": 700, "tablet": 800, "celular": 1000, "minipc": 1500, "oculos vr": 1500, "videogame": 1800, "notebook": 3000, "televisao": 5000, "pcgamer": 7500}
+
+# início operação
+while True:
+  texto = input("Nos diga o que deseja fazer:").lower()
+# verificar estoque
+  if texto == "v_e":
+    print(f"Produtos: {estoque}.")
+# vender produtos
+  elif texto == "v_p":
+    while True:
+      novo_prod = input("Qual produto deseja vender?").lower()
+      while True:
+        preco = input("Qual o preço do seu produto?")
+        try:
+          preco_int = int(preco)
+          print(f"Produto '{novo_prod}' adicionado ao estoque por {preco_int}.")
+          if 'estoque' in locals():
+            estoque[novo_prod] = preco_int
+            adicionar = input("Deseja vender outro produto? (s/?)").lower()
+            if adicionar == "s":
+              break
+            else:
+              break
+          else:
+            print("Ação impossível.")
+            break
+        except ValueError:
+          print("Digite um número inteiro.")
+# comprar produtos
+  elif texto == "c_p":
+    while True:
+      prod_r = input("Insira o produto que deseja comprar:").lower()
+      if prod_r not in estoque:
+        print("O produto não está no estoque.")
+      elif 'estoque' in locals():
+        print(f"Produto '{prod_r}' comprado com sucesso por {estoque[prod_r]}.")
+        estoque.pop(prod_r)
+        confirm = input("Deseja comprar outro produto? (s/n)").lower()
+        if confirm == "s":
+          breakpoint
+        else:
+          break
+# pesquisar produtos
+  elif texto == "p_p":
+    while True:
+      prod_p = input("Digite o nome do produto:").lower()
+      if prod_p in estoque:
+        print(f"O produto está no estoque e custa {estoque[prod_p]}.")
+        confirm = input("Deseja comprar o produto? (s/?)")
+        if confirm == "s":
+          estoque.pop(prod_p)
+          print(f"Produto '{prod_p}' removido do estoque.")
+          break
+        else:
+          break
+      else:
+        print("O produto não foi encontrado.")
+# finalizar navegação
+  elif texto == "f_n":
+    print("Obrigado pela preferência! Volte sempre!")
+    break
+# nenhuma ação apresentada
+  else:
+    print("Insira uma das das ações apresentadas.")
