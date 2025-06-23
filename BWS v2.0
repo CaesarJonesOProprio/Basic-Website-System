@@ -1,0 +1,370 @@
+# Main language: Pt/Br
+# "s" from "(s/?)" mean "yes"
+
+import time
+
+contas = {}
+
+estoque = {"mouse": 50, "teclado": 100, "headphone": 150, "microfone": 150, "roteador": 170, "power bank": 200, "smart watch": 300, "nobreak": 500, "caixa de som": 700, "placa de video": 700, "monitor": 700, "tablet": 800, "impressora": 850, "celular": 1000, "mini pc": 1500, "oculos vr": 1500, "videogame": 1800, "notebook": 3000, "televisao": 5000, "pc gamer": 7500, "cabo de rede": 150, "sensor de movimento": 150, "camera": 200, "central de alarme": 350, "luz led": 20, "sirene para central": 40}
+
+carrinho = {}
+
+orcamento = {}
+
+def wait():
+  time.sleep(0.5)
+
+def space():
+  print(" ")
+
+def spait():
+  space()
+  wait()
+
+def verify_len(s, tipo):
+  while True:
+    print(f"Digite {s} {tipo} (ou 'cancelar' para sair): ")
+    entrada = input()
+    if entrada.lower() == "cancelar":
+      spait()
+      return None
+    elif len(entrada) <= 3:
+      spait()
+      print("Insira ao menos 4 caracteres.")
+    else:
+      spait()
+      return entrada
+
+# INICIO ==========================================
+while True:
+  while True:
+    print("Seja bem-vindo(a) à Cesinha Eletro's!")
+    wait()
+    print("Deseja fazer 'login' ou 'cadastrar' uma nova conta?")
+    
+    pergunta = input().lower()
+  
+# CADASTRO ========================================
+    if pergunta == "cadastrar":
+      spait()
+  
+# EMAIL -------------------------------------------
+      while True:
+        print("Insira seu e-mail:")
+        email = input()
+        spait()
+        if email in contas:
+          print("Este e-mail já está cadastrado.")
+          continue
+        else:
+          if len(email) <= 0:
+            print("Insira um email válido.")
+            spait()
+            continue
+          else:
+            if "@" in email:
+              arroba = email.find("@")
+              if arroba + 1 < len(email) and email[arroba + 1].isalnum() and email[arroba - 1].isalnum():
+                if "." in email[arroba:]:
+                  
+  # NOME ------------------------------------------
+                  nome = verify_len("seu nome").capitalize()
+                  if nome is None:
+                    continue
+                    
+  # SENHA -----------------------------------------
+                  senha = verify_len("sua senha")
+                  if senha is None:
+                      continue
+                      
+  # FINAL -----------------------------------------
+                  print("Perfeito, sua conta foi criada e já foi logada!")
+                  contas[email] = {"nome": nome, "senha": senha}
+                  spait()
+                  break
+                else:
+                  print("Insira um email válido: falta ponto depois do @")
+                  space()
+                  wait()
+              else:
+                print("Insira um email válido.")
+                space()
+                wait()
+            else:
+              print("Insira um email válido.")
+              space()
+              wait()
+              
+# LOGIN ===========================================
+    elif pergunta == "login":
+      spait()
+      
+  # EMAIL -----------------------------------------
+      print("Digite seu e-mail:")
+      email = input()
+      spait()
+      
+  # SENHA -----------------------------------------
+      print("Digite sua senha:")
+      senha = input()
+      spait()
+      
+  # FINAL -----------------------------------------
+      if email in contas and contas[email]["senha"] == senha:
+        primeiro_nome = contas[email]['nome'].split()[0]
+        print(f"Olá, {primeiro_nome}! Bem-vindo(a) de volta.")
+        space()
+        wait()
+      else:
+        print("E-mail ou senha incorretos.")
+        space()
+        wait()
+        break
+        
+# NADA ==========================================
+    else:
+      print("Escolha uma opção válida.")
+      space()
+      wait()
+      break
+      
+# LOJA ============================================
+    print("="*29
+    print("Opções:")
+    print("[v_e] Verificar estoque.")
+    print("[c_c] Checar carrinho.")
+    print("[a_p] Adicionar produto ao carrinho.")
+    print("[e_p] Excluir item do carrinho.")
+    print("[l_c] Limpar carrinho.")
+    print("[c_p] Comprar produtos.")
+    print("[v_p] Vender produto.")
+    print("[p_p] Pesquisar produto.")
+    print("[orçamento] Emitir orçamento.")
+    print("[voltar] Voltar para cadastro/login.")
+    print("="*29)
+    
+    while True:
+      resposta = input("Nos diga o que deseja fazer.").lower()
+      
+  # VERIFICAR ESTOQUE -----------------------------
+      if resposta == "v_e":
+        print(f"Estoque:")
+        item = estoque
+        preco = estoque[item]
+        for item, preco in estoque:
+          print(item)
+          print(preco)
+          
+  # CHECAR CARRINHO -------------------------------
+      elif resposta == "c_c":
+        if len(carrinho) >= 1:
+          produtos = carrinho[produtos]
+          print(f"Carrinho: {produtos}.")
+        else:
+          print("O carrinho está vazio.")
+          
+  # VENDER ----------------------------------------
+      elif resposta == "v_p":
+        while True:
+          novo_prod = input("Qual produto deseja vender?").lower()
+          if novo_prod not in estoque:
+              preco = input("Qual o preço do seu produto? ")
+              try:
+                valor = int(preco)
+                if 'estoque' in locals():
+                  estoque[novo_prod] = valor
+                print(f"Produto '{novo_prod}' adicionado ao estoque por {valor}.")
+                adicionar = input("Deseja vender outro produto? (s/?)").lower()
+                if adicionar != "s":
+                  break
+              except ValueError:
+                print("Digite um número inteiro.")
+          else:
+            print("O produto já se encontra em estoque.")
+            
+  # ADICIONAR -------------------------------------
+      elif resposta == "a_p":
+        while True:
+          prod_c = input("Insira o produto que deseja adicionar ao carrinho:").lower()
+          if prod_c not in estoque:
+            print("O produto não está no estoque.")
+          else:
+            preco_p_c = estoque[prod_c]
+            print(f"Produto '{prod_c}' adicionado com sucesso ao carrinho por {preco_p_c}.")
+            carrinho.update({prod_c: preco_p_c})
+            confirm = input("Deseja adicionar outro produto? (s/?)").lower()
+            if confirm != "s":
+              break
+              
+  # EXCLUIR ITENS ---------------------------------
+      elif resposta == "e_p":
+        if len(carrinho) >= 1:
+          while True:
+            ex_prod = input("Qual produto deseja excluir?").lower()
+            if ex_prod in carrinho:
+              print(f"Produto excluído do carrinho.")
+              carrinho.pop(ex_prod)
+              confirm = input("Deseja excluir outro produto? (s/?)").lower()
+              if confirm == "s":
+                if len(carrinho) < 1:
+                  print("Não há mais produtos no carrinho.")
+                  break
+              else:
+                break
+            else:
+              print("O produto não está no carrinho.")
+        else:
+          print("Não há produtos no carrinho. ")
+          
+  # LIMPAR CARRINHO -------------------------------
+      elif resposta == "l_c":
+        while True:
+          if len(carrinho) >= 1:
+            confirmacao = input("Deseja mesmo limpar o carrinho? (s/?)").lower()
+            if confirmacao == "s":
+              print("O carrinho foi limpo com sucesso.")
+              carrinho = {}
+              break
+            else:
+              break
+          else:
+            print("O carrinho já está vazio.")
+            break
+            
+  # COMPRAR PRODUTOS ------------------------------
+      elif resposta == "c_p":
+        while True:
+          if len(carrinho) >= 1:
+            soma = sum(carrinho.values())
+            confirm = input(f"Deseja comprar os itens presentes no carrinho? Valor total: {soma}. (s/?)").lower()
+            if confirm == "s":
+              print("Compra bem-sucedida.")
+              carrinho = {}
+              break
+            else:
+              break
+          else:
+            print("O carrinho está vazio. Coloque itens nele primeiro.")
+            break
+            
+  # PESQUISAR -------------------------------------
+      elif resposta == "p_p":
+        while True:
+          while True:
+            prod_p = input("Digite o nome do produto:").lower()
+            if prod_p in estoque:
+              print(f"O produto está no estoque e custa {estoque[prod_p]}.")
+              confirmacao = input("Deseja adicionar o produto ao carrinho? (s/?)").lower()
+              if confirmacao == "s":
+                preco_p_p = estoque[prod_p]
+                print(f"Produto '{prod_p}' adicionado com sucesso ao carrinho.")
+                carrinho.update({prod_p: preco_p_p})
+                break
+              else:
+                break
+            else:
+              print("O produto não foi encontrado.")
+              continue
+          confirmacao = input("Deseja pesquisar outro produto? (s/?)").lower()
+          if confirmacao == "s":
+            continue
+          else:
+            break
+            
+# ORÇAMENTO =======================================
+      elif resposta == "orçamento":
+        print("Você pode pesquisar os produtos que deseja (pesquisar),") 
+        print("adicionar diretamente (adicionar), emitir o orçamento (emitir)")
+        print("ou voltar para o menu (voltar).")
+        while True:
+          pe_ad = input("O que deseja?").lower()
+          
+  # ADICIONAR -------------------------------------
+          if pe_ad == "adicionar":
+            while True:
+              prod_orca = input("Insira o produto que deseja adicionar. Senão, digite 'pronto':").lower()
+              if prod_orca in estoque:
+                preco_p_orca = estoque[prod_orca]
+                print(f"Produto '{prod_orca}' adicionado por {preco_p_orca}.")
+                orcamento.update({prod_orca: preco_p_orca})
+              elif prod_orca == "pronto":
+                break
+              else:
+                print("O produto não está no estoque.")
+                continue
+                
+  # PESQUISA --------------------------------------
+          elif pe_ad == "pesquisar":
+            while True:
+              while True:
+                prod_p = input("Digite o nome do produto:").lower()
+                if prod_p in estoque:
+                  print(f"O produto está no estoque e custa {estoque[prod_p]}.")
+                  confirmacao = input("Deseja adicionar o produto? (s/?)").lower()
+                  if confirmacao == "s":
+                    preco_p_p = estoque[prod_p]
+                    print(f"Produto '{prod_p}' adicionado por {estoque[prod_p]}.")
+                    orcamento.update({prod_p: preco_p_p})
+                    break
+                  else:
+                    break
+                else:
+                  print("O produto não foi encontrado.")
+              confirmacao = input("Deseja pesquisar outro produto? (s/?)").lower()
+              if confirmacao == "s":
+                continue
+              else:
+                break
+                
+  # EMISSÃO -----------------------------------------
+          elif pe_ad == "emitir":
+            while True:
+              if not orcamento:
+                print("Adicione itens ao seu orçamento primeiro.")
+                break
+              else:
+                preco_total = sum(orcamento.values())
+                print("Seu orçamento:")
+                for item in orcamento:
+                  print(f"- {item}.")
+                print(f"Valor total: {preco_total}")
+                confirmacao = input("Os itens estão de acordo para a emissão? (s/?)").lower()
+                if confirmacao == "s":
+                  print("Seu orçamento foi emitido e logo entraremos em contato.")
+                  orcamento = {}
+                  break
+                else:
+                  while True:
+                    item = input("Qual dos itens está incorreto (ou 'nenhum')?").lower()
+                    if item == "nenhum":
+                      break
+                    elif item in orcamento:
+                      alteracao = input("Digite a alteração (ou 'cancelar').").lower()
+                      if alteracao == "cancelar":
+                        break
+                      elif alteracao in estoque:
+                        del orcamento[item]
+                        orcamento[alteracao] = estoque[alteracao]
+                        print("Alteração realizada:")
+                        print(f"{item} -> {alteracao}")
+                        break
+                      else:
+                        print("Não existe este item no seu orçamento.")
+                    else:
+                      print("O item não se encontra no seu orçamento.")
+                
+                break
+            
+          elif pe_ad == "voltar":
+            break
+            
+          else:
+            print("Escolha uma opção.")
+            
+# VOLTAR ======================================
+      elif resposta == "voltar":
+        break
+        
+# NADA ============================================
+      else:
+        print("Insira uma das opções apresentadas.")
