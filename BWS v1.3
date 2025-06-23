@@ -1,0 +1,151 @@
+# Main language: Pt/Br
+# "s" from "(s/?)" mean "yes"
+
+# inicio
+print("="*40)
+print("Seja bem-vindo à Cesinha Eletro's!")
+print("="*40)
+print("Opções:")
+print("[v_e] Verificar estoque.")
+print("[c_c] Checar carrinho.")
+print("[a_p] Adicionar produto ao carrinho.")
+print("[e_p] Excluir item do carrinho.")
+print("[l_c] Limpar carrinho.")
+print("[c_p] Comprar produtos.")
+print("[v_p] Vender produto.")
+print("[p_p] Pesquisar produto.")
+print("="*40)
+
+# variáveis gerais
+estoque = {"mouse": 50, "teclado": 100, "headphone": 150, "microfone": 150, "roteador": 170, "power bank": 200, "smart watch": 300, "nobreak": 500, "caixa de som": 700, "placa de video": 700, "monitor": 700, "tablet": 800, "impressora": 850, "celular": 1000, "mini pc": 1500, "oculos vr": 1500, "videogame": 1800, "notebook": 3000, "televisao": 5000, "pc gamer": 7500}
+
+carrinho = {}
+
+orcamento = {}
+
+# início operação
+while True:
+  resposta = input("Nos diga o que deseja fazer.").lower()
+
+# verificar estoque
+  if resposta == "v_e":
+    print(f"Estoque: {estoque}.")
+
+# checar o carrinho
+  elif resposta == "c_c" and len(carrinho) == 0:
+    print("Carrinho: vazio.")
+  elif resposta == "c_c" and len(carrinho) >= 1:
+    print(f"Carrinho: {carrinho}.")
+
+# vender produtos
+  elif resposta == "v_p":
+    while True:
+      novo_prod = input("Qual produto deseja vender?").lower()
+      if novo_prod not in estoque:
+          preco = input("Qual o preço do seu produto? ")
+          try:
+            valor = int(preco)
+            if 'estoque' in locals():
+              estoque[novo_prod] = valor
+            print(f"Produto '{novo_prod}' adicionado ao estoque por {valor}.")
+            adicionar = input("Deseja vender outro produto? (s/?)").lower()
+            if adicionar != "s":
+              break
+          except ValueError:
+            print("Digite um número inteiro.")
+      else:
+        print("O produto já se encontra em estoque.")
+
+# adicionar produtos
+  elif resposta == "a_p":
+    while True:
+      prod_c = input("Insira o produto que deseja adicionar ao carrinho:").lower()
+      if prod_c not in estoque:
+        print("O produto não está no estoque.")
+      else:
+        preco_p_c = estoque[prod_c]
+        print(f"Produto '{prod_c}' adicionado com sucesso ao carrinho por {preco_p_c}.")
+        carrinho.update({prod_c: preco_p_c})
+        confirm = input("Deseja adicionar outro produto? (s/?)").lower()
+        if confirm != "s":
+          break
+
+# excluir item do carrinho
+  elif resposta == "e_p":
+    if len(carrinho) >= 1:
+      while True:
+        ex_prod = input("Qual produto deseja excluir?").lower()
+        if ex_prod in carrinho:
+          print(f"Produto excluído do carrinho.")
+          carrinho.pop(ex_prod)
+          confirm = input("Deseja excluir outro produto? (s/?)").lower()
+          if confirm != "s":
+            break
+          elif confirm == "s" and len(carrinho) >= 1:
+            continue
+          else:
+            print("Não há mais produtos no carrinho.")
+            break
+        else:
+          print("O produto não está no carrinho.")
+    else:
+        print("Não há produtos no carrinho. ")
+
+# limpar carrinho
+  elif resposta == "l_c":
+    while True:
+      if len(carrinho) >= 1:
+        confirmacao = input("Deseja mesmo limpar o carrinho? (s/?)").lower()
+        if confirmacao == "s":
+          print("O carrinho foi limpo com sucesso.")
+          carrinho = {}
+          break
+        else:
+          break
+      else:
+        print("O carrinho já está vazio.")
+        break
+
+# comprar produtos no carrinho
+  elif resposta == "c_p":
+    while True:
+      if len(carrinho) >= 1:
+        soma = sum(carrinho.values())
+        confirm = input(f"Deseja comprar os itens presentes no carrinho? Valor total: {soma}. (s/?)").lower()
+        if confirm == "s":
+          print("Compra bem-sucedida.")
+          carrinho = {}
+          break
+        else:
+          break
+      else:
+        print("O carrinho está vazio. Coloque itens nele primeiro.")
+        break
+
+# pesquisar produtos
+  elif resposta == "p_p":
+    while True:
+      while True:
+        prod_p = input("Digite o nome do produto:").lower()
+        if prod_p in estoque:
+          print(f"O produto está no estoque e custa {estoque[prod_p]}.")
+          confirmacao = input("Deseja adicionar o produto ao carrinho? (s/?)").lower()
+          if confirmacao == "s":
+            preco_p_p = estoque[prod_p]
+            print(f"Produto '{prod_p}' adicionado com sucesso ao carrinho.")
+            carrinho.update({prod_p: preco_p_p})
+            break
+          else:
+            break
+        else:
+          print("O produto não foi encontrado.")
+          continue
+      confirmacao = input("Deseja pesquisar outro produto? (s/?)").lower()
+      if confirmacao == "s":
+        continue
+      else:
+        break
+
+# nenhuma ação apresentada
+  else:
+    print("Insira uma das das opções apresentadas.")
